@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations: {}
+  labels:
+    name: fluentd-forwarder
+  name: fluentd-forwarder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: fluentd-forwarder
+  serviceName: fluentd-forwarder
+  template:
+    metadata:
+      annotations: {}
+      labels:
+        name: fluentd-forwarder
+    spec:
+      affinity: {}
+      containers:
+        - args: []
+          env:
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  key: log_level
+                  name: fluentd-forwarder
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: OUTPUT_FORMAT
+              valueFrom:
+                configMapKeyRef:
+                  key: output_format
+                  name: fluentd-forwarder
+            - name: S3_ACCESSKEY
+              valueFrom:
+                secretKeyRef:
+                  key: s3_accesskey
+                  name: fluentd-forwarder
+            - name: S3_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  key: s3_bucket
+                  name: fluentd-forwarder
+            - name: S3_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  key: s3_endpoint
+                  name: fluentd-forwarder
+            - name: S3_INTERVAL
+              valueFrom:
+                configMapKeyRef:
+                  key: s3_interval
+                  name: fluentd-forwarder
+            - name: S3_SECRETKEY
+              valueFrom:
+                secretKeyRef:
+                  key: s3_secretkey
+                  name: fluentd-forwarder
+            - name: SHARED_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: shared_key
+                  name: fluentd-forwarder
+          image: docker.io/vshn/fluentd-with-plugins:v1.0.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            tcpSocket:
+              port: 24224
+            timeoutSeconds: 3
+          name: fluentd-forwarder
+          ports:
+            - containerPort: 24224
+              name: forwarder-tcp
+              protocol: TCP
+            - containerPort: 24224
+              name: forwarder-udp
+              protocol: UDP
+          readinessProbe:
+            initialDelaySeconds: 2
+            periodSeconds: 3
+            tcpSocket:
+              port: 24224
+            timeoutSeconds: 2
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          stdin: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: false
+          volumeMounts:
+            - mountPath: /fluentd/log/
+              name: buffer
+            - mountPath: /fluentd/etc
+              name: fluentd-config
+              readOnly: true
+      dnsPolicy: ClusterFirst
+      imagePullSecrets: []
+      initContainers: []
+      nodeSelector: {}
+      restartPolicy: Always
+      serviceAccount: fluentd-forwarder
+      terminationGracePeriodSeconds: 30
+      tolerations: []
+      volumes:
+        - emptyDir: {}
+          name: buffer
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: td-agent.conf
+                path: fluent.conf
+            name: fluentd-forwarder
+            optional: true
+          name: fluentd-config
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+  volumeClaimTemplates: []

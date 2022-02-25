@@ -1,0 +1,70 @@
+= Howto forward to S3 Bucket
+== Example
+
+[source,yaml]
+----
+applications:
+  - fluentd-forwarder as fluentd-forwarder-customer-a
+
+parameters:
+  fluentd-forwarder-customer-a:
+    env:
+      log_level: info
+      s3_bucket: <NAME_OF_S3_BUCKET>
+      s3_endpoint: <URL_TO_S3_STORAGE>
+      s3_interval: 5m
+      output_format: '%Y-%m-%d_%H%M'
+
+    secrets:
+      shared_key: '?{vaultkv:${cluster:tenant}/${cluster:name}/fluentd-forwarder/${_instance}/sharedkey}'
+      s3_accesskey: '?{vaultkv:${cluster:tenant}/${cluster:name}/fluentd-forwarder/${_instance}/s3_accesskey}'
+      s3_secretkey: '?{vaultkv:${cluster:tenant}/${cluster:name}/fluentd-forwarder/${_instance}/s3_secretkey}'
+
+    config_vars:
+      match_tmpl: |
+        @type s3
+        <format>
+          @type json
+        </format>
+        aws_key_id "#{ENV['S3_ACCESSKEY']}"
+        aws_sec_key "#{ENV['S3_SECRETKEY']}"
+        s3_bucket "#{ENV['S3_BUCKET']}"
+        s3_endpoint "#{ENV['S3_ENDPOINT']}"
+        time_slice_format "#{ENV['OUTPUT_FORMAT']}"
+        <buffer time>
+          @type memory
+          compress text
+          chunk_limit_size 256m
+          timekey "#{ENV['S3_INTERVAL']}"
+          timekey_wait 1m
+          timekey_use_utc true
+        </buffer>
+
+    config: |
+      <system>
+        log_level "#{ENV['LOG_LEVEL']}"
+      </system>
+      <source>
+        @type forward
+        port 24224
+        null
+        <security>
+          shared_key "#{ENV['SHARED_KEY']}"
+          self_hostname "#{ENV['HOSTNAME']}"
+        </security>
+      </source>
+
+      <match kubernetes.**>
+        @type rewrite_tag_filter
+        <rule>
+          key \$['kubernetes']['namespace_name']
+          pattern ^(.+)$
+          tag kube.$1
+        </rule>
+      </match>
+
+      <match kube.my_namespace>
+        %(match_tmpl)s
+        path my_namespace/
+      </match>
+----
