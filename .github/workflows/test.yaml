@@ -5,7 +5,7 @@ on:
       - main
 
 env:
-  COMPONENT_NAME:
+  COMPONENT_NAME: fluentd-forwarder
 
 jobs:
   linting:
