@@ -1,7 +1,7 @@
 parameters:
   fluentd_forwarder:
-    =_metadata: {}
-    multi_instance: true
+    =_metadata:
+      multi_instance: true
     namespace: syn-fluentd-forwarder
 
     image:
