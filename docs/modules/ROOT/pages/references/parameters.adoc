@@ -1,0 +1,117 @@
+= Parameters
+
+The parent key for all of the following parameters is `openshift4_s3_forwarder`.
+
+
+== `fluentd`
+
+[horizontal]
+type:: dictionary
+default::
++
+[source,yaml]
+----
+fluentd:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+  nodeselector: {}
+  affinity: {}
+  tolerations: []
+----
+
+Fluentd pod parameters.
+
+=== `replicas`
+
+[horizontal]
+type:: integer
+default:: 1
+
+Number of replicas of the forwarder pod.
+
+
+=== `resources`
+
+[horizontal]
+type:: dict
+default::
++
+[source,yaml]
+----
+fluentd:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+----
+
+Fluentd pod resource requests and limits.
+
+
+== `env`
+
+[horizontal]
+type:: dictionary
+default::
++
+[source,yaml]
+----
+env: {}
+----
+
+Environment variables for forwarder pod.
+
+
+== `secrets`
+
+[horizontal]
+type:: dictionary
+default::
++
+[source,yaml]
+----
+secrets: {}
+----
+
+Secrets for forwarder pod, like credentials etc. These secrets will be stored in a `secrets` object and loaded as env variables in the forwarder pod.
+
+
+== `config_vars`
+
+[horizontal]
+type:: dictionary
+default::
++
+[source,yaml]
+----
+config_vars: {}
+----
+
+Variables for the config file.
+
+See xref:how-tos/forward-to-s3.adoc[Forward to s3] for an example
+
+
+== `config`
+
+[horizontal]
+type:: string
+default::
++
+[source,yaml]
+----
+config: ""
+----
+
+Config file for fluentd.
+
+See xref:how-tos/forward-to-s3.adoc[Forward to s3] for an example
+
+
+== Example
+
+* xref:how-tos/forward-to-s3.adoc[Forward to s3]

@@ -1,0 +1,9 @@
+= fluentd-forwarder
+
+fluentd-forwarder is a Commodore component to manage fluentd-forwarder.
+
+See the xref:references/parameters.adoc[parameters] reference for further details.
+
+* xref:how-tos/forward-to-s3.adoc[Forward to s3]
+
+
