@@ -6,7 +6,7 @@
 
 name: fluentd-forwarder
 title: Fluentd Forwarder
-version: master
+version: main
 start_page: ROOT:index.adoc
 nav:
   - modules/ROOT/partials/nav.adoc
