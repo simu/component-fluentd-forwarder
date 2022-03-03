@@ -93,7 +93,18 @@ config_vars: {}
 
 Variables for the config file.
 
-See xref:how-tos/forward-to-s3.adoc[Forward to s3] for an example
+[source,yaml]
+----
+config_vars:
+  integer: 5
+  string: hello
+
+config: |
+  integer value is %(integer)d
+  string value is %(string)s
+----
+
+See xref:how-tos/forward-to-s3.adoc[Forward to s3] for an example.
 
 
 == `config`
@@ -109,9 +120,4 @@ config: ""
 
 Config file for fluentd.
 
-See xref:how-tos/forward-to-s3.adoc[Forward to s3] for an example
-
-
-== Example
-
-* xref:how-tos/forward-to-s3.adoc[Forward to s3]
+See xref:how-tos/forward-to-s3.adoc[Forward to s3] for an example.
