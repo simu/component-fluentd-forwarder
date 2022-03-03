@@ -6,6 +6,7 @@ local inv = kap.inventory();
 local params = inv.parameters.fluentd_forwarder;
 local app_name = inv.parameters._instance;
 local is_openshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+local fluentd_image = '%(registry)s/%(repository)s:%(tag)s' % params.images.fluentd;
 
 local namespace = kube.Namespace(params.namespace) {
   metadata+: {
@@ -53,7 +54,7 @@ local statefulset = kube.StatefulSet(app_name) {
         tolerations: params.fluentd.tolerations,
         containers_:: {
           [app_name]: kube.Container(app_name) {
-            image: params.image.registry + '/' + params.image.repository + ':' + params.image.tag,
+            image: fluentd_image,
             resources: params.fluentd.resources,
             ports_:: {
               forwarder_tcp: { protocol: 'TCP', containerPort: 24224 },

@@ -4,10 +4,11 @@ parameters:
       multi_instance: true
     namespace: syn-fluentd-forwarder
 
-    image:
-      registry: docker.io
-      repository: vshn/fluentd-with-plugins
-      tag: v1.0.0
+    images:
+      fluentd:
+        registry: docker.io
+        repository: vshn/fluentd-with-plugins
+        tag: v1.0.0
 
     fluentd:
       replicas: 1
