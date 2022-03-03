@@ -1,2 +1,10 @@
 * xref:index.adoc[Home]
+
+.Howtos
+
+* xref:how-tos/forward-to-s3.adoc[Forward to S3 Bucket]
+* xref:how-tos/forward-to-splunk.adoc[Forward to Splunk Server] (coming soon)
+
+.Technical reference
+
 * xref:references/parameters.adoc[Parameters]
