@@ -1,0 +1,25 @@
+{
+  "template": "https://github.com/projectsyn/commodore-component-template.git",
+  "commit": "a0e67cd96f1b2368a15af8300216c812da1d2a4c",
+  "checkout": "main",
+  "context": {
+    "cookiecutter": {
+      "name": "fluentd-forwarder",
+      "slug": "fluentd-forwarder",
+      "parameter_key": "fluentd_forwarder",
+      "test_cases": "defaults",
+      "add_lib": "n",
+      "add_pp": "n",
+      "add_golden": "y",
+      "add_matrix": "y",
+      "add_go_unit": "n",
+      "copyright_holder": "VSHN AG <info@vshn.ch>",
+      "copyright_year": "2023",
+      "github_owner": "projectsyn",
+      "github_name": "component-fluentd-forwarder",
+      "github_url": "https://github.com/projectsyn/component-fluentd-forwarder",
+      "_template": "https://github.com/projectsyn/commodore-component-template.git"
+    }
+  },
+  "directory": null
+}
