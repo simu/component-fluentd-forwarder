@@ -5,7 +5,7 @@ on:
       - v*
 
 jobs:
-  dist:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -27,6 +27,6 @@ jobs:
         with:
           body: ${{steps.build_changelog.outputs.changelog}}
           prerelease: "${{ contains(github.ref, '-rc') }}"
-          # Ensure target branch for release is "main"
-          commit: main
+          # Ensure target branch for release is "master"
+          commit: master
           token: ${{ secrets.GITHUB_TOKEN }}
