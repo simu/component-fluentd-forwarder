@@ -46,7 +46,7 @@ local statefulset = kube.StatefulSet(app_name) {
     template+: {
       metadata+: {
         annotations+: {
-          'checksum/config': std.md5(std.manifestJsonMinified(configmap.data)),
+          'checksum/config': std.trace('config checksum', std.md5(std.manifestJsonMinified(configmap.data))),
         },
       },
       spec+: {
@@ -119,11 +119,14 @@ local service = kube.Service(app_name) {
 
 
 // Define outputs below
-{
-  [if params.namespace != 'openshift-logging' then '00_namespace']: namespace,
-  '11_serviceaccount': serviceaccount,
-  '12_configmap': configmap,
-  '13_secret': secret,
-  '21_statefulset': statefulset,
-  '22_service': service,
-}
+std.trace(
+  'main.jsonnet',
+  {
+    [if params.namespace != 'openshift-logging' then '00_namespace']: namespace,
+    '11_serviceaccount': serviceaccount,
+    '12_configmap': configmap,
+    '13_secret': secret,
+    '21_statefulset': statefulset,
+    '22_service': service,
+  }
+)

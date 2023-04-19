@@ -5,6 +5,9 @@ local argocd = import 'lib/argocd.libjsonnet';
 
 local app = argocd.App('fluentd-forwarder', params.namespace);
 
-{
-  'fluentd-forwarder': app,
-}
+std.trace(
+  'app.jsonnet',
+  {
+    'fluentd-forwarder': app,
+  }
+)
